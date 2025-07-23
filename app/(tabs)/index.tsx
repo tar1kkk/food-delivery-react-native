@@ -1,12 +1,15 @@
 import "../globals.css";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {FlatList, Image, Pressable, StatusBar, Text, TouchableOpacity, View} from "react-native";
+import {Button, FlatList, Image, Pressable, StatusBar, Text, TouchableOpacity, View} from "react-native";
 import {images, offers} from "@/constants";
 import {Fragment} from "react";
 import cn from 'clsx';
 import CartButton from "@/components/CartButton";
+import * as Sentry from "@sentry/react-native";
+import {useAuthStore} from "@/store/auth.store";
 
 export default function App() {
+    const {user} = useAuthStore();
     return (
         <SafeAreaView className='flex-1 bg-white'>
             <StatusBar
@@ -56,6 +59,9 @@ export default function App() {
                             </View>
                            <CartButton/>
                         </View>
+                    )}
+                    ListFooterComponent={()=>(
+                        <Button title='Try!' onPress={ () => { Sentry.captureException(new Error('First error')) }}/>
                     )}
                 />
         </SafeAreaView>
